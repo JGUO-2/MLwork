@@ -150,29 +150,61 @@ Output:
 \begin{lstlisting}
 class Secret:
     __name = 'yoga'                 # `加上双下划线进行私有化`  
+    grade = 'high'
+A = Secret()
+A.grade                             # `可访问到特性`
+A.__name                            # `访问不到特性`
+\end{lstlisting}
+\begin{lstlisting}
+class Secret:
+    __name = 'yoga'                 # `加上双下划线进行私有化`  
     def get_name(self):      
         return self.__name
 A = Secret()
-A.get_name()                        # `访问不到特性`
+A.get_name()                        # `可访问到类里已私有化的特性`
 \end{lstlisting}
 \qquad 上述方法不可在外部对私有化对象进行修改，因此可以通过使用函数property来对类中已经私有化的对象进行调用或者修改。有一些面向对象语言支持私有特性，这些特性无法从外部直接访问，需要编写getter和setter方法对这些特性进行操作。Python不需要getter和setter方法，其所有特性都是公开的。对于property函数，我们也可以通过用装饰器函数的方式来进行使用。
 \begin{lstlisting}
-class foo:
+class Secret:
     def __init__(self):
-        self.name = 'yoda'
+        self.__name = 'yoda'
         self.work = 'master'
     def get_person(self):
-        return self.name,self.work
+        return self.__name
     def set_person(self,value):
-        self.name,self.work = value
+        self.__name = value
     person = property(get_person,set_person)
 
-A3 = foo()
-A3.person
-('yoda', 'master')
-A3.person = 'skylaer','programer'
-A3.person
-('skylaer','programer')
+A = Secret()
+
+print(A.person)
+Output:('yoda')
+
+A.person = 'skylaer'
+print(A.person)
+Output:('skylaer')
+\end{lstlisting}
+利用装饰器函数。
+\begin{lstlisting}
+class Secret:
+	def __init__(self):
+	    self.__name = 'yoda'
+	    self.work = 'master'
+	@property
+	def person(self):
+	    return self.__name
+	@person.setter
+	def person(self,value):
+	    self.__name = value
+	
+A = Secret()
+	
+print(A.person)
+Output:('yoda')
+	
+A.person = 'skylaer'
+print(A.person)
+Output:('skylaer')
 \end{lstlisting}
 \qquad 对于面向对象的类，其封装可以隐藏实现细节，使得代码模块化；继承可以扩展已存在的代码模块（类）；它们的目的都是为了代码重用。而多态则是为了实现接口重用，为了类在继承和派生的时候，保证使用任一类的实例的某一属性时的正确调用。
 
